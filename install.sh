@@ -1,34 +1,89 @@
 #!/bin/bash
 
-if [ "$(whoami)" == "root" ]; then
-    exit 1
-fi
+# Función para verificar e instalar paquetes
+install_packages() {
 
+    local PACKAGE_MANAGER
+
+    # Pedir al usuario que seleccione una distribución
+    echo "Seleccione la distribución:"
+    echo "1. Kali Linux"
+    echo "2. Parrot OS"
+    echo "3. Ubuntu Linux"
+    echo "4. Arch Linux"
+
+    read -p "Ingresa el número de la distribución: " DISTRO_NUM
+    
+    case $DISTRO_NUM in
+        1)
+            DISTRO_NAME="Kali Linux"
+            ;;
+        2)
+            DISTRO_NAME="Parrot"
+            ;;
+	3)
+            DISTRO_NAME="Ubuntu"
+            ;;
+        4)
+            DISTRO_NAME="Arch Linux"
+            ;;
+        *)
+            echo "Distribución no válida."
+            exit 1
+            ;;
+    esac
+
+    # Comando para instalar paquetes según la distribución
+    if [ "$DISTRO_NAME" == "Kali Linux" ] || [ "$DISTRO_NAME" == "Parrot" ]; then
+        PACKAGE_MANAGER="apt"
+    elif [ "$DISTRO_NAME" == "Ubuntu" ]; then
+        PACKAGE_MANAGER="apt-get"
+    elif [ "$DISTRO_NAME" == "Arch Linux" ]; then
+        PACKAGE_MANAGER="pacman"
+    else
+        echo "Distribución no compatible: $DISTRO_NAME"
+        exit 1
+    fi
+
+    # Actualizar la lista de paquetes
+    if [ "$PACKAGE_MANAGER" == "apt" ]; then
+        sudo $PACKAGE_MANAGER update
+    elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
+        sudo $PACKAGE_MANAGER update	
+    elif [ "$PACKAGE_MANAGER" == "pacman" ]; then
+        sudo $PACKAGE_MANAGER -Sy
+    fi
+
+    PACKAGES_COMMON="kitty rofi feh xclip ranger scrot scrub wmname firejail imagemagick cmatrix htop neofetch python3-pip procps tty-clock fzf lsd bat pamixer flameshot build-essential git vim libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev libxcb-shape0-dev libuv1-dev cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev meson libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev"
+
+    for package in $PACKAGES_COMMON; do
+        if [ "$PACKAGE_MANAGER" == "apt" ] && ! dpkg -l | grep -q " $package "; then
+            echo "Instalando $package..."
+            sudo $PACKAGE_MANAGER install -y $package
+	elif [ "$PACKAGE_MANAGER" == "apt-get" ] && ! pacman -Qq | grep -q "^$package$"; then
+            echo "Instalando $package..."
+            sudo $PACKAGE_MANAGER install -y $package
+        elif [ "$PACKAGE_MANAGER" == "pacman" ] && ! pacman -Qq | grep -q "^$package$"; then
+            echo "Instalando $package..."
+            sudo $PACKAGE_MANAGER -S --noconfirm $package
+        else
+            echo "$package ya está instalado."
+        fi
+    done
+
+    # Instalar paquete lsd en todas las distribuciones
+    if ! command -v lsd &>/dev/null; then
+        echo "Instalando lsd..."
+        sudo $PACKAGE_MANAGER install -y lsd
+    else
+        echo "lsd ya está instalado."
+    fi
+}
+
+# Verificar e instalar paquetes
+install_packages
 ruta=$(pwd)
 
-# Actualizando el sistema
-
-sudo apt update
-
-sudo parrot-upgrade
-
-# Instalando dependencias de Entorno
-
-sudo apt install -y build-essential git vim xcb libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev libxcb-shape0-dev
-
-# Instalando Requerimientos para la polybar
-
-sudo apt install -y cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev libmpdclient-dev libuv1-dev libnl-genl-3-dev
-
-# Dependencias de Picom
-
-sudo apt install -y meson libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev libpcre3 libpcre3-dev
-
-# Instalamos paquetes adionales
-
-sudo apt install -y feh scrot scrub zsh rofi xclip bat locate neofetch wmname acpi bspwm sxhkd imagemagick ranger kitty
-
-# Creando carpeta de Reposistorios
 mkdir ~/github
 cd ~/github
 echo "Instalando REPOSITORIOS..."
@@ -71,7 +126,7 @@ sudo ninja -C build install
 echo "Instalando P10K..."
 sleep 1.5
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
-echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 # Instalando p10k root
 sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /root/.powerlevel10k
 # Configuramos el tema Nord de Rofi:
@@ -100,9 +155,9 @@ sudo cp -rv $ruta/Config/kitty ~/.config/
 sudo cp -rv $ruta/Config/kitty /root/.config/
 # Copia de configuracion de .p10k.zsh y .zshrc
 rm -rf ~/.zshrc
-cp -v $ruta/.zshrc ~/.zshrc
-cp -v $ruta/.p10k.zsh ~/.p10k.zsh
-sudo cp -v $ruta/.p10k.zsh-root /root/.p10k.zsh
+cp -v $ruta/zshrc ~/.zshrc
+cp -v $ruta/p10k.zsh ~/.p10k.zsh
+sudo cp -v $ruta/p10k.zsh-root /root/.p10k.zsh
 # Script
 sudo cp -v $ruta/scripts/whichSystem.py /usr/local/bin/
 sudo cp -v $ruta/scripts/screenshot /usr/local/bin/
@@ -128,6 +183,7 @@ sudo chmod +x /usr/local/bin/screenshot
 # Configuramos el Tema de Rofi
 rofi-theme-selector
 # Elijiendo Wallpaper
+echo "#WALLPAPER" >> ~/.config/bspwm/bspwmrc
 clear
 echo "Menú de opciones:"
 echo "1. Anime"
@@ -138,19 +194,19 @@ echo "5. Black Panther"
 read -p "Ingresa el número del wallpaper que quiere: " Wall_num
 case $Wall_num in
     1)
-        echo "#WALLPAPER \n feh --bg-fill ~/Wallpaper/a.jpg" >> ~/.config/bspwm/bspwmrc
+        echo "feh --bg-fill ~/Wallpaper/a.jpg &" >> ~/.config/bspwm/bspwmrc
         ;;
     2)
-        echo "#WALLPAPER \n feh --bg-fill ~/Wallpaper/cat.jpg" >> ~/.config/bspwm/bspwmrc
+        echo "feh --bg-fill ~/Wallpaper/cat.jpg &" >> ~/.config/bspwm/bspwmrc
         ;;
     3)
-        echo "#WALLPAPER \n feh --bg-fill ~/Wallpaper/eivor.jpg" >> ~/.config/bspwm/bspwmrc    
+        echo "feh --bg-fill ~/Wallpaper/eivor.jpg &" >> ~/.config/bspwm/bspwmrc    
         ;;
     4)
-        echo "#WALLPAPER \n feh --bg-fill ~/Wallpaper/fsociety.jpg" >> ~/.config/bspwm/bspwmrc
+        echo "feh --bg-fill ~/Wallpaper/fsociety.jpg &" >> ~/.config/bspwm/bspwmrc
         ;;
     5)
-        echo "#WALLPAPER \n feh --bg-fill ~/Wallpaper/wakanda.jpg" >> ~/.config/bspwm/bspwmrc
+        echo "feh --bg-fill ~/Wallpaper/wakanda.jpg &" >> ~/.config/bspwm/bspwmrc
         ;;
 esac
 
