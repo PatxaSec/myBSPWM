@@ -7,7 +7,10 @@
 ## 1.- Installation
 
 ```
+#For kali and ubuntu
 sudo apt-get update && sudo apt-get upgrade -y
+#For parrot
+sudo apt-get update && sudo parrot-upgrade -y
 ```
 ```
 git clone https://github.com/PatxaSec/myBSPWM.git
