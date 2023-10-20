@@ -156,7 +156,7 @@ chsh -s /usr/bin/zsh
 sudo usermod --shell /usr/bin/zsh root
 sudo ln -s -fv ~/.zshrc /root/.zshrc
 # Asignamos Permisos a los Scritps
-chmod +x ~/.config/xshkd/xshkdrc
+chmod +x ~/.config/sxhkd/sxhkdrc
 chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/scripts/bspwm_resize
 chmod +x ~/.config/bin/ethernet_status.sh
