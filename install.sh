@@ -55,10 +55,6 @@ install_packages() {
             echo "Instalando $package..."
             sudo $PACKAGE_MANAGER install -y $package
             sleep 2
-	    elif [ "$PACKAGE_MANAGER" == "apt-get" ] && ! pacman -Qq | grep -q "^$package$"; then
-            echo "Instalando $package..."
-            sudo $PACKAGE_MANAGER install -y $package
-            sleep 2
         else
             echo "$package ya está instalado."
         fi
