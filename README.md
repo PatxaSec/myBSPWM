@@ -7,27 +7,19 @@
 ## 1.- Installation
 
 ```
-#---1
-
-sudo apt-get update
-sudo apt-get upgrade -y
-
-#---2
-
+sudo apt-get update && apt-get upgrade -y
+```
+```
 git clone https://github.com/PatxaSec/myBSPWM.git
-
-#---3
-
+```
+```
 cd myBSPWM
-
-#---4
-
+```
+```
 chmod +x install.sh
-
-#---5
-
+```
+```
 ./install.sh
-
 ```
 ## 2.- Shortcuts (atajos de teclado)
 
