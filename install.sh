@@ -10,7 +10,6 @@ install_packages() {
     echo "1. Kali Linux"
     echo "2. Parrot OS"
     echo "3. Ubuntu Linux"
-    echo "4. Arch Linux"
 
     read -p "Ingresa el número de la distribución: " DISTRO_NUM
     
@@ -24,9 +23,6 @@ install_packages() {
 	3)
             DISTRO_NAME="Ubuntu"
             ;;
-        4)
-            DISTRO_NAME="Arch Linux"
-            ;;
         *)
             echo "Distribución no válida."
             exit 1
@@ -38,8 +34,6 @@ install_packages() {
         PACKAGE_MANAGER="apt"
     elif [ "$DISTRO_NAME" == "Ubuntu" ]; then
         PACKAGE_MANAGER="apt-get"
-    elif [ "$DISTRO_NAME" == "Arch Linux" ]; then
-        PACKAGE_MANAGER="pacman"
     else
         echo "Distribución no compatible: $DISTRO_NAME"
         exit 1
@@ -50,8 +44,6 @@ install_packages() {
         sudo $PACKAGE_MANAGER update
     elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
         sudo $PACKAGE_MANAGER update	
-    elif [ "$PACKAGE_MANAGER" == "pacman" ]; then
-        sudo $PACKAGE_MANAGER -Sy
     fi
 
     PACKAGES_COMMON="kitty rofi feh xclip ranger scrot scrub wmname firejail imagemagick cmatrix htop neofetch python3-pip procps tty-clock fzf lsd bat pamixer flameshot build-essential git vim libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev libxcb-shape0-dev libuv1-dev cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev meson libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev"
@@ -63,9 +55,6 @@ install_packages() {
 	elif [ "$PACKAGE_MANAGER" == "apt-get" ] && ! pacman -Qq | grep -q "^$package$"; then
             echo "Instalando $package..."
             sudo $PACKAGE_MANAGER install -y $package
-        elif [ "$PACKAGE_MANAGER" == "pacman" ] && ! pacman -Qq | grep -q "^$package$"; then
-            echo "Instalando $package..."
-            sudo $PACKAGE_MANAGER -S --noconfirm $package
         else
             echo "$package ya está instalado."
         fi
