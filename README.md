@@ -9,18 +9,6 @@
 ```
 #---1
 
-# For Kali
-
-sudo apt update
-sudo apt-get upgrade -y
-
-# For Parrot
-
-sudo apt update
-sudo parrot-upgrade -y
-
-# For Ubuntu
-
 sudo apt-get update
 sudo apt-get upgrade -y
 
