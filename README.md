@@ -3,9 +3,6 @@
 ### TESTED ON:
 - Kali Linux
 - Parrot OS
-- Arch
-
-A big an' kind regards to S4VITAR
 
 ## 1.- Installation
 
@@ -26,11 +23,6 @@ sudo parrot-upgrade -y
 
 sudo apt-get update
 sudo apt-get upgrade -y
-
-# For Arch
-
-sudo pacman -Sy
-sudo pacman -Syu --noconfirm
 
 #---2
 
