@@ -20,7 +20,7 @@ install_packages() {
         2)
             DISTRO_NAME="Parrot"
             ;;
-	3)
+	    3)
             DISTRO_NAME="Ubuntu"
             ;;
         *)
@@ -29,22 +29,24 @@ install_packages() {
             ;;
     esac
 
+
     # Comando para instalar paquetes según la distribución
-    if [ "$DISTRO_NAME" == "Kali Linux" ] || [ "$DISTRO_NAME" == "Parrot" ]; then
-        PACKAGE_MANAGER="apt"
-    elif [ "$DISTRO_NAME" == "Ubuntu" ]; then
+    if [ "$DISTRO_NAME" == "Kali Linux" ] || [ "$DISTRO_NAME" == "Parrot" ] || [ "$DISTRO_NAME" == "Ubuntu" ]; then
         PACKAGE_MANAGER="apt-get"
     else
-        echo "Distribución no compatible: $DISTRO_NAME"
+        echo "[!] --------------->>>>>>>>>>>>>> Distribución no compatible"
         exit 1
     fi
 
     # Actualizar la lista de paquetes
-    if [ "$PACKAGE_MANAGER" == "apt" ]; then
-        sudo $PACKAGE_MANAGER update
-    elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
+    if [ "$PACKAGE_MANAGER" == "apt-get" ]; then
         sudo $PACKAGE_MANAGER update	
     fi
+
+    sleep 3
+
+    echo "Instalando para $DISTRO_NAME"
+    echo "Buscando Paquetes necesarios..."
 
     PACKAGES_COMMON="kitty rofi feh xclip ranger scrot scrub wmname firejail imagemagick cmatrix htop neofetch python3-pip procps tty-clock fzf lsd bat pamixer flameshot build-essential git vim libxcb-util0-dev libxcb-ewmh-dev libxcb-randr0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-xinerama0-dev libasound2-dev libxcb-xtest0-dev libxcb-shape0-dev libuv1-dev cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python3-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev meson libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev libxcb-glx0-dev"
 
@@ -52,26 +54,24 @@ install_packages() {
         if [ "$PACKAGE_MANAGER" == "apt" ] && ! dpkg -l | grep -q " $package "; then
             echo "Instalando $package..."
             sudo $PACKAGE_MANAGER install -y $package
-	elif [ "$PACKAGE_MANAGER" == "apt-get" ] && ! pacman -Qq | grep -q "^$package$"; then
+            sleep 2
+	    elif [ "$PACKAGE_MANAGER" == "apt-get" ] && ! pacman -Qq | grep -q "^$package$"; then
             echo "Instalando $package..."
             sudo $PACKAGE_MANAGER install -y $package
+            sleep 2
         else
             echo "$package ya está instalado."
         fi
     done
-
-    # Instalar paquete lsd en todas las distribuciones
-    if ! command -v lsd &>/dev/null; then
-        echo "Instalando lsd..."
-        sudo $PACKAGE_MANAGER install -y lsd
-    else
-        echo "lsd ya está instalado."
-    fi
 }
+
+ruta=$(pwd)
+
 
 # Verificar e instalar paquetes
 install_packages
-ruta=$(pwd)
+
+
 
 mkdir ~/github
 cd ~/github
@@ -87,7 +87,7 @@ sleep 1.5
 cd ~/github/bspwm
 make -j$(nproc)
 sudo make install
-sudo apt install bspwm -y
+sudo apt-get install bspwm -y
 # instalando sxhkd
 echo "Instalando sxhkd..."
 sleep 1.5
@@ -151,7 +151,7 @@ sudo cp -v $ruta/p10k.zsh-root /root/.p10k.zsh
 sudo cp -v $ruta/scripts/whichSystem.py /usr/local/bin/
 sudo cp -v $ruta/scripts/screenshot /usr/local/bin/
 # Plugins ZSH
-sudo apt install -y zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete
+sudo apt-get install -y zsh-syntax-highlighting zsh-autosuggestions zsh-autocomplete
 sudo mkdir /usr/share/zsh-sudo
 cd /usr/share/zsh-sudo
 sudo wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh
