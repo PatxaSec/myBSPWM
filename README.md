@@ -89,7 +89,7 @@ chmod +x install.sh
 - [MR Robot](Wallpaper/fsociety.jpg)
 - [Black Panther](Wallpaper/wakanda.jpg)
 
-## 4.- Ejemplos de Entorno
+## 4.- Ejemplo de Entorno
 ![Kali Linux - AC Valhalla Eivor](eivor.png)
-![Kali Linux - AC Valhalla Eivor - Neo.](eivor-1.png)
+
 --------NVIM is not included--------
