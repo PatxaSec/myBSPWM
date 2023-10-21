@@ -23,9 +23,6 @@ bspc rule -a Screenkey manage=off
 # RESOLUCION ARANDR
 
 
-# WALLPAPER
-feh --bg-fill ~/Wallpaper/a.jpg
-
 # POLYBAR
 ~/.config/polybar/launch.sh
 
