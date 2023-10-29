@@ -8,6 +8,6 @@ if [ $ip_target ] && [ $name_target ]; then
 elif [ $(cat ~/.config/bin/target | wc -w) -eq 1 ]; then
 	echo "%{F#e51d0b}什%{F#ffffff} $ip_target"
 else
-	echo "%{F#e51d0b}ﲅ %{u-}%{F#ffffff} No target"
+	echo "%{F#e51d0b}ﲅ"
 fi
 
