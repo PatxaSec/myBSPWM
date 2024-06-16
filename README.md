@@ -60,7 +60,6 @@ chmod +x install.sh
 - [Black Panther](Wallpaper/wakanda.jpg)
 
 ## 4.- Ejemplo de Entorno
-![Kali Linux ](example.png)
-
+![example](example.png)
 ---
 
