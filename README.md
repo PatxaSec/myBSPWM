@@ -48,11 +48,6 @@ chmod +x install.sh
 
 <kbd>Windows</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> : Abrir Burpsuite.
 
-<kbd>print</kbd> : screenshot seleccionable.
-
-<kbd>print</kbd> + <kbd>ctrl</kbd>: screenshot.
-
-<kbd>print</kbd> + <kbd>alt</kbd> : screenshot pantalla.
 
 
 ## 3.- Wallpapers
